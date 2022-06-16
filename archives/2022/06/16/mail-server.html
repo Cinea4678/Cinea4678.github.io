@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/favicons/favicon-16x16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/favicons/favicon-32x32.png?v=2.6.2" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/favicons/apple-touch-icon.png?v=2.6.2" sizes="180x180"><link rel="mask-icon" href="/%5Bobject%20Object%5D?v=2.6.2" color="#54bcff"><meta name="msapplication-TileImage" content="/%5Bobject%20Object%5D"><meta name="msapplication-TileColor" content="#000000"><meta name="description" content="最近购入了一个新域名，想搭一个邮件服务器来做自己的私人邮箱，以后收发邮件邮箱地址都使用自己的专属域名，岂不美哉？刚好手边有一台闲置的服务器，说干就干。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何在2022年的国内VPS上搭建能收能发的邮件服务器？">
+<meta property="og:url" content="https://blog.cinea.com.cn/archives/2022/06/16/mail-server.html">
+<meta property="og:site_name" content="Cinea的博客">
+<meta property="og:description" content="最近购入了一个新域名，想搭一个邮件服务器来做自己的私人邮箱，以后收发邮件邮箱地址都使用自己的专属域名，岂不美哉？刚好手边有一台闲置的服务器，说干就干。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blogsources-1305284863.file.myqcloud.com/images/image-20220616141553814.png">
+<meta property="og:image" content="https://blogsources-1305284863.file.myqcloud.com/images/image-20220616141944424.png">
+<meta property="og:image" content="https://blogsources-1305284863.file.myqcloud.com/images/image-20220616145445194.png">
+<meta property="article:published_time" content="2022-06-16T05:59:14.000Z">
+<meta property="article:modified_time" content="2022-06-16T06:55:35.000Z">
+<meta property="article:author" content="Cinea Zhan">
+<meta property="article:tag" content="爱好">
+<meta property="article:tag" content="技术">
+<meta property="article:tag" content="教程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blogsources-1305284863.file.myqcloud.com/images/image-20220616141553814.png"><title>如何在2022年的国内VPS上搭建能收能发的邮件服务器？ | Cinea的博客</title><link ref="canonical" href="https://blog.cinea.com.cn/archives/2022/06/16/mail-server.html"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.2"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">归档</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">Cinea的博客</div><div class="header-banner-info__subtitle"></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">如何在2022年的国内VPS上搭建能收能发的邮件服务器？</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-06-16</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-06-16</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">948</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">4分</span></span></div></header><div class="post-body"><p>最近购入了一个新域名，想搭一个邮件服务器来做自己的私人邮箱，以后收发邮件邮箱地址都使用自己的专属域名，岂不美哉？刚好手边有一台闲置的服务器，说干就干。</p>
+<span id="more"></span>
+
+
+        <h2 id="服务器准备"   >
+          <a href="#服务器准备" class="heading-link"><i class="fas fa-link"></i></a><a href="#服务器准备" class="headerlink" title="服务器准备"></a>服务器准备</h2>
+      <p>首先，用作邮件服务器的主机配置不应该太低，这里推荐单人使用内存以1G到2G为宜。其次，我们使用的服务器应该在安装邮件系统前进行一次重置，重置后可以安装宝塔，但不要安装宝塔推荐的软件（尤其是MySQL）。</p>
+
+        <h2 id="邮件系统的安装"   >
+          <a href="#邮件系统的安装" class="heading-link"><i class="fas fa-link"></i></a><a href="#邮件系统的安装" class="headerlink" title="邮件系统的安装"></a>邮件系统的安装</h2>
+      <p>接下来，邮件系统的安装很简单，这里我使用的是开源的<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://ewomail.com/" >EwoMail</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>，大家也可以其他的系统。</p>
+<p>我们跟随官方提供的安装文档安装就可以了：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://doc.ewomail.com/docs/ewomail/install" >安装 (ewomail.com)</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>。因为我们的内存可能比较小，所以推荐大家设置Swap的时候将大小调整为2GB左右，也就是在这一步</p>
+<p><img src="https://blogsources-1305284863.file.myqcloud.com/images/image-20220616141553814.png"></p>
+<p>换成</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=/mnt/swap bs=1M count=2048  </span><br></pre></td></tr></table></div></figure>
+
+<p>安装邮件系统时，推荐使用在线安装（文档中的方式三）。就很奇怪，阿里云的华东服务器，在我当时用Gitee下载时速度仅有几百K。后来用在线安装，网速就正常了。</p>
+
+        <h2 id="邮件系统的配置"   >
+          <a href="#邮件系统的配置" class="heading-link"><i class="fas fa-link"></i></a><a href="#邮件系统的配置" class="headerlink" title="邮件系统的配置"></a>邮件系统的配置</h2>
+      <p>安装文档里有五个链接，请按照顺序依次做一遍。原文档写的很详细，这里我就不赘述了。</p>
+<p><img src="https://blogsources-1305284863.file.myqcloud.com/images/image-20220616141944424.png" alt="image-20220616141944424"></p>
+<p>开放端口时注意不要忘记去VPS控制台的安全设置上打开这些端口。</p>
+<p>这些做完，就可以登录你的邮件系统尝一下鲜了。这里我们要做两个测试，就是本地收发以及外网发本地收。具体来说，就是你需要在后台设置两个测试账号test@xxx和test2@xxx，并用test向test2发送一封测试邮件。之后，再用你的其他邮箱（如QQ、网易等）向test发送一封测试邮件。如果两封邮件都能收到，那就说明你已经初步大功告成了。</p>
+
+        <h2 id="邮件推送配置"   >
+          <a href="#邮件推送配置" class="heading-link"><i class="fas fa-link"></i></a><a href="#邮件推送配置" class="headerlink" title="邮件推送配置"></a>邮件推送配置</h2>
+      <p>但是，你极有可能会发现你没有办法用你刚刚搭好的邮箱往外发邮件。这是因为阿里和腾讯等一众厂商为了减少垃圾邮件，限制了普通VPS使用25端口(SMTP端口)向外发送数据。很遗憾，截至目前我也没有找到解决或者替换为465端口的方法。</p>
+<p>但是，虽然我们没有办法用我们的服务器往外发邮件，我们却可以进行一波“曲线救国”。这里我们需要去注册一个邮件推送服务，百度搜索邮件推送并选择自己心仪的服务商即可。大多数服务商都可以免费提供少量的推送服务。</p>
+<p>这里我们需要根据服务商的要求进行域名验证和DNS的修改。这里我们先根据它的要求修改MX记录，并把优先级设为10（或者其他不为1的值）。</p>
+<p>设置完成后，我们可以把我们之前的MX记录添加回来，并把优先级设置的比推送更高。</p>
+
+        <h2 id="邮件客户端设置"   >
+          <a href="#邮件客户端设置" class="heading-link"><i class="fas fa-link"></i></a><a href="#邮件客户端设置" class="headerlink" title="邮件客户端设置"></a>邮件客户端设置</h2>
+      <p>现在，我们就可以自由地使用我们的邮箱啦。我们使用Outlook、邮箱大师之类的客户端增加邮箱，配置时选择高级配置。这里我们的发送服务器就填写推送服务商的服务器和密码，接收服务器就填写我们自己的服务器和密码即可。</p>
+<p><img src="https://blogsources-1305284863.file.myqcloud.com/images/image-20220616145445194.png"></p>
+<p>之后就可以愉快地使用我们的邮箱和域名收发邮件啦~</p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="https://blog.cinea.com.cn">Cinea Zhan</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="https://blog.cinea.com.cn/archives/2022/06/16/mail-server.html">https://blog.cinea.com.cn/archives/2022/06/16/mail-server.html</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://blog.cinea.com.cn/tags/%E7%88%B1%E5%A5%BD/">爱好</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://blog.cinea.com.cn/tags/%E6%8A%80%E6%9C%AF/">技术</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://blog.cinea.com.cn/tags/%E6%95%99%E7%A8%8B/">教程</a></span></div><nav class="post-paginator paginator"><div class="paginator-next"><a class="paginator-next__link" href="/archives/2022/05/20/220520-Home.html"><span class="paginator-prev__text">千里漂泊回乡记（更新中）</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%87%86%E5%A4%87"><span class="toc-number">1.</span> <span class="toc-text">
+          服务器准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%82%AE%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">
+          邮件系统的安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%82%AE%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-number">3.</span> <span class="toc-text">
+          邮件系统的配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%82%AE%E4%BB%B6%E6%8E%A8%E9%80%81%E9%85%8D%E7%BD%AE"><span class="toc-number">4.</span> <span class="toc-text">
+          邮件推送配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%82%AE%E4%BB%B6%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BE%E7%BD%AE"><span class="toc-number">5.</span> <span class="toc-text">
+          邮件客户端设置</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/images/author.png" alt="avatar"></div><p class="sidebar-ov-author__text">独立之思想，自由之精神。</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/Cinea4678" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="https://www.zhihu.com/people/cinea4678" target="_blank" rel="noopener" data-popover="知乎" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">知</span></a><a class="sidebar-ov-social-item" href="1650121748" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">4</div><div class="sidebar-ov-state-item__name">归档</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">3</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">7</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>Cinea Zhan</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.2</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script></body></html>
